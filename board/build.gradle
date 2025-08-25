@@ -4,6 +4,10 @@ plugins {
 
 bootJar.enabled = true
 jar.enabled = true
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }}
 
 group = 'com.traffictest'
 version = 'unspecified'

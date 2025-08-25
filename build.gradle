@@ -38,10 +38,10 @@ subprojects {
 
 	}
 
-	dependencies { // 모든 하위 모듈에 추가 될 의존성 목록입니다.
-		implementation 'org.springframework.boot:spring-boot-starter'
-		implementation 'org.springframework.boot:spring-boot-starter-web'
-		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    dependencies { // 모든 하위 모듈에 추가 될 의존성 목록입니다.
+        implementation 'org.springframework.boot:spring-boot-starter'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
 //        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
         implementation 'net.datafaker:datafaker:2.4.2'
         //querydsl
@@ -58,7 +58,8 @@ subprojects {
         implementation 'org.mariadb.jdbc:mariadb-java-client'
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
-	}
+    }
+
 
 	test {
 		useJUnitPlatform()
