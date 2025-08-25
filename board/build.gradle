@@ -3,11 +3,15 @@ plugins {
 }
 
 bootJar.enabled = true
-
 jar.enabled = true
 
 group = 'com.traffictest'
 version = 'unspecified'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }}
 
 repositories {
     mavenCentral()
