@@ -1,5 +1,3 @@
-version: '3.9' # Updated version
-
 services:
   statistics-app:
     ### Option 1 : Use directly build but slow
@@ -54,11 +52,72 @@ services:
         reservations:
           cpus: '0.5'
           memory: 512M
+  mysqld-exporter:
+    image: prom/mysqld-exporter:v0.17.2
+    container_name: mysqld-exporter
+    ports:
+      - "9104:9104"
+    command:
+      - "--mysqld.username=root:mysql_password"
+      - "--mysqld.address=traffic-db:3306"
+    networks:
+      - traffic-network
+    volumes:
+      - mysqld_exporter_data:/var/lib/mysqld_exporter
+    depends_on:
+      - traffic-db
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1024M
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+  redis-exporter:
+    image: oliver006/redis_exporter:v1.76.0
+    container_name: redis-exporter
+    ports:
+      - "9121:9121"
+    environment:
+      - REDIS_ADDR=traffic-redis:6379
+    networks:
+      - traffic-network
+    depends_on:
+      - traffic-redis
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1024M
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - prometheus_data:/var/lib/prometheus
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - traffic-network
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1024M
+        reservations:
+          cpus: '0.5'
+          memory: 512M
   traffic-redis:
     image: redis:6.2
     container_name: redis
     ports:
       - "6379:6379"
+    volumes:
+      - redis_data:/var/lib/redis
     networks:
       - traffic-network
     deploy:
@@ -92,6 +151,7 @@ services:
         reservations:
           cpus: '0.5'
           memory: 512M
+
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
@@ -119,3 +179,6 @@ networks:
 volumes:
   db_data:
   grafana_data:
+  prometheus_data:
+  mysqld_exporter_data:
+  redis_data:
